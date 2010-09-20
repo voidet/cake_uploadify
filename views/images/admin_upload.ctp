@@ -1,0 +1,1 @@
+<?php echo $this->Javascript->object($file_info); ?>
