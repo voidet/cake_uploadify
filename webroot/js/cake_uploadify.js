@@ -4,7 +4,7 @@ $(function() {
 			'uploader': '/cake_uploadify/flash/uploadify.swf',
 			'script': settings.script,
 			'method': 'POST',
-			'scriptData': {'uuid': settings.uuid},
+			'scriptData': settings,
 			'cancelImg': '/cake_uploadify/img/cancel.png',
 			'folder': settings.folder,
 			'queueID': settings.uuid+'-fileQueue',
@@ -16,13 +16,23 @@ $(function() {
 		function updateFileInfo(event, queueId, fileObj, response, data) {
 			var upload = $.parseJSON(response);
 			if (upload.Image.length != 0) {
-				console.debug($('#'+upload.uuid+'-uploadBin'));
-				$('#'+upload.uuid+'-uploadBin').append('<img src="/generated/images/'+upload.Image.slug+'_w100_h100.jpg" />');
+				$('#'+upload.metadata.uuid+'.uploadBin').append('<img src="/generated/images/'+upload.Image.slug+'_w100_h100.jpg" /><input type="hidden" name="'+upload.metadata.inputName+'[Image][][image_id]" value="'+upload.Image.id+'" /><input type="hidden" name="'+upload.metadata.inputName+'[Image][][image_position]" value="" />');
 			}
-
 		}
-
 	});
 
+	$('#PostAdminForm').submit(function() {
+		var order = 0;
+		$('.uploadBin').each(function() {
+			console.debug($(this));
+			$(this).filter(function() {
+					console.debug($(this).find('input[type=hidden]').attr('name').match('position'));
+				}).each(function() {
+					order++;
+					$(this).attr('value', order)
+			});
+		});
+		return false;
+	});
 
 });

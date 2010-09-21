@@ -54,7 +54,7 @@ class ImagesController extends CakeUploadifyAppController {
 					$this->data = $imageExists;
 				}
 
-				$this->data['uuid'] = $this->params['form']['uuid'];
+				$this->data['metadata'] = $this->params['form'];
 
 				$file_info = $this->data;
 				$this->set(compact('file_info'));
