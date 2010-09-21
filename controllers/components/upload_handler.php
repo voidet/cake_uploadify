@@ -30,9 +30,20 @@ class UploadHandlerComponent extends Object {
 	function setParams() {
 		$this->params['form']['Filedata']['name'] = $this->filename;
 		$this->params['form']['Filedata']['path'] = str_replace(WWW_ROOT, '', $this->uploadpath);
-		$this->params['form']['Filedata']['slug'] = strtolower(Inflector::slug($this->filename, '-'));
+		$extension = array_pop(explode('.', $this->filename));
+
+		$this->params['form']['Filedata']['ext'] = $extension;
+
+		$filename = substr($this->filename, 0, (0 - (strlen($extension) + 1)));
+
+		list($width, $height) = getimagesize($this->uploadpath.$this->filename);
+
+		$this->params['form']['Filedata']['width'] = $width;
+		$this->params['form']['Filedata']['height'] = $height;
+		$this->params['form']['Filedata']['slug'] = strtolower(Inflector::slug($filename, '-'));
 		$this->params['form']['Filedata']['md5'] = md5_file($this->uploadpath.$this->filename);
 		$this->params['form']['Filedata']['full_path'] = $this->uploadpath.$this->filename;
+
 	}
 
 	function removeDuplicate($file) {
