@@ -18,7 +18,23 @@ $(function() {
 		function updateFileInfo(event, queueId, fileObj, response, data) {
 			var upload = $.parseJSON(response);
 			if (upload.Image.length != 0) {
-				$('#'+upload.metadata.uuid+'.uploadBin').append('<div class="uploadItem"><img src="/generated/images/'+upload.Image.slug+'_w100_h100.jpg" /><input type="hidden" name="'+upload.metadata.inputName+'[Image]['+upload.Image.id+'][image_id]" value="'+upload.Image.id+'" /><input type="hidden" name="'+upload.metadata.inputName+'[Image]['+upload.Image.id+']['+upload.metadata.position_field+']" value="" class="uploadPosition" /></div>');
+				var width = Number(upload.metadata.width);
+				var height = Number(upload.metadata.height);
+
+				var item = $('#'+upload.metadata.uuid+'.uploadBin').append('<div class="uploadItem" style="width: '+ (width + 10) +'px; height: '+ (height + 10) +'px;"><img src="/cake_uploadify/img/close.png" height="25" width="25" alt="Remove Item?" border="0" class="cakeUploadify-removeItem" /><img src="/generated/images/'+upload.Image.slug+'_w'+ width +'_h100.jpg" class="uploadItemImage" /><input type="hidden" name="'+upload.metadata.inputName+'[Image]['+upload.Image.id+'][image_id]" value="'+upload.Image.id+'" /><input type="hidden" name="'+upload.metadata.inputName+'[Image]['+upload.Image.id+']['+upload.metadata.position_field+']" value="" class="uploadPosition" /></div>');
+				$('.uploadItem').hover(function() {
+					console.debug($(this));
+					$(this).find('.cakeUploadify-removeItem').fadeIn('fast');
+				}, function() {
+					$(this).find('.cakeUploadify-removeItem').fadeOut('fast');
+				});
+
+				$('.cakeUploadify-removeItem').click(function(){
+					$(this).closest('.uploadItem').fadeOut('slow', function() {
+						$(this).remove();
+					});
+				});
+
 				$('.uploadBin').sortable('refresh');
 			}
 		}
