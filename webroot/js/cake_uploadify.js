@@ -1,7 +1,8 @@
 $(function() {
 
 	$(document).bind('attachUploadify', function(event, settings) {
-		$(".uploadify."+settings.uuid).uploadify({
+		console.debug(settings);
+		$("#CakeUploadify-"+settings.uuid).uploadify({
 			'uploader': '/cake_uploadify/flash/uploadify.swf',
 			'script': settings.script,
 			'method': 'POST',
