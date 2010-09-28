@@ -80,3 +80,12 @@ THE SOFTWARE.
 	right: 0;
 	margin: -12px 12 0 0;
 }
+
+.uploadSpeed {
+	font-size: 18px;
+	color: #EEE;
+	position: absolute;
+	top: 0;
+	right: 0;
+	display: block;
+}
