@@ -81,11 +81,16 @@ THE SOFTWARE.
 	margin: -12px 12 0 0;
 }
 
+.uploadSpeed span {
+	color: #CCC;
+}
+
 .uploadSpeed {
 	font-size: 18px;
-	color: #EEE;
+	color: #ECECEC;
 	position: absolute;
 	top: 0;
 	right: 0;
-	display: block;
+	display: none;
+	padding: 20px;
 }

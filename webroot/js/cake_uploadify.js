@@ -30,23 +30,20 @@ $(function() {
 		}
 
 		function cleanUp() {
-			//$('#'+settings.uuid+'-trnsfr, #'+settings.uuid+'-speed').delay(1000).fadeOut('slow');
+			$('#'+settings.uuid+'-trnsfr, #'+settings.uuid+'-speed').delay(4000).fadeOut('slow');
 		}
 
 		function onSelectItems(event, queueId, fileObj) {
+			$('#'+settings.uuid+'-speed').fadeIn('fast');
 			files.push(fileObj.size);
 		}
 
 		function updateTrnsfrProgress(event, queueId, fileObj, data) {
-			$('#'+settings.uuid+'-speed').html(data.speed+'KB/s');
+			$('#'+settings.uuid+'-speed span').html(Math.round(data.speed));
 			trnsfr.setData(data.allBytesLoaded);
-			console.debug(data.allBytesLoaded );
-			console.debug(files);
 		}
 
 		function onItemComplete(event, queueId, fileObj, response, data) {
-//			var file = files.shift();
-
 			var upload = $.parseJSON(response);
 			if (upload.Image.length != 0) {
 				var width = Number(upload.metadata.width);
