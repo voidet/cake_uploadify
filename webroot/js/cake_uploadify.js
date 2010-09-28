@@ -27,14 +27,17 @@ $(function() {
 
 		function addFilesToTrnsfer(event, data) {
 			trnsfr = $('#'+settings.uuid+'-trnsfr').trnsfr(files);
+			$('#'+settings.uuid+'-trnsfr, #'+settings.uuid+'-speed').fadeIn('fast');
 		}
 
 		function cleanUp() {
-			$('#'+settings.uuid+'-trnsfr, #'+settings.uuid+'-speed').delay(4000).fadeOut('slow');
+			$('#'+settings.uuid+'-trnsfr, #'+settings.uuid+'-speed').delay(4000).fadeOut('slow', function() {
+				$('#'+settings.uuid+'-trnsfr').empty();
+				files = [];
+			});
 		}
 
 		function onSelectItems(event, queueId, fileObj) {
-			$('#'+settings.uuid+'-speed').fadeIn('fast');
 			files.push(fileObj.size);
 		}
 

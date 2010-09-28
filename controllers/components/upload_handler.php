@@ -15,7 +15,7 @@ class UploadHandlerComponent extends Object {
 
 	function upload() {
 		$ok = false;
-		$this->uploadpath = $this->params['form']['folder'];
+		$this->uploadpath = WWW_ROOT.$this->params['form']['webroot_path'];
 		$this->filename = $this->params['form']['Filedata']['name'];
 		$ok = $this->write();
 
