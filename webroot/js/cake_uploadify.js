@@ -52,7 +52,12 @@ $(function() {
 				var width = Number(upload.metadata.width);
 				var height = Number(upload.metadata.height);
 
-				var item = $('#'+upload.metadata.uuid+'.uploadBin').append('<div id="'+queueId+'" class="uploadItem" style="width: '+ (width + 10) +'px; height: '+ (height + 10) +'px;"><img src="/cake_uploadify/img/close.png" height="25" width="25" alt="Remove Item?" border="0" class="cakeUploadify-removeItem" /><img src="/generated/images/'+upload.Image.slug+'_w'+ width +'_h100.jpg" class="uploadItemImage" /><input type="hidden" name="'+upload.metadata.inputName+'[Image]['+upload.Image.id+'][image_id]" value="'+upload.Image.id+'" /><input type="hidden" name="'+upload.metadata.inputName+'[Image]['+upload.Image.id+']['+upload.metadata.position_field+']" value="" class="uploadPosition" /></div>');
+				var extrafields = '';
+				for (i=0; i < settings.extra_fields.length; i++) {
+					extrafields = extrafields + '<input type="hidden" name="'+upload.metadata.inputName+'['+upload.Image.id+']['+settings.extra_fields[i]+']" />';
+				}
+
+				var item = $('#'+upload.metadata.uuid+'.uploadBin').append('<div id="'+queueId+'" class="uploadItem" style="width: '+ (width + 10) +'px; height: '+ (height + 10) +'px;"><img src="/cake_uploadify/img/close.png" height="25" width="25" alt="Remove Item?" border="0" class="cakeUploadify-removeItem" /><img src="/generated/images/'+upload.Image.slug+'_w'+ width +'_h100.jpg" class="uploadItemImage" /><input type="hidden" name="'+upload.metadata.inputName+'['+upload.Image.id+'][uuid]" value="'+settings.uuid+'" /><input type="hidden" name="'+upload.metadata.inputName+'['+upload.Image.id+'][image_id]" value="'+upload.Image.id+'" /><input type="hidden" name="'+upload.metadata.inputName+'['+upload.Image.id+']['+upload.metadata.position_field+']" value="" class="uploadPosition" />'+extrafields+'</div>');
 
 				$('#'+queueId).css({top: 0}).fadeIn('slow').animate({'margin-top':'20px'},{queue:false,duration:500,easing:'easeOutBounce'});
 
