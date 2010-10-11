@@ -48,6 +48,9 @@ $(function() {
 
 		function onItemComplete(event, queueId, fileObj, response, data) {
 			var upload = $.parseJSON(response);
+			console.debug(upload);
+
+			//Handle Image Uploads
 			if (upload.Image.length != 0) {
 				var width = Number(upload.metadata.width);
 				var height = Number(upload.metadata.height);
@@ -75,6 +78,11 @@ $(function() {
 				});
 				$('.uploadBin').sortable('refresh');
 			}
+
+			if (upload.Video.length != 0) {
+				$('#'+upload.metadata.uuid+'.uploadBin').append('success');
+			}
+
 		}
 	});
 

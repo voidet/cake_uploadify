@@ -17,14 +17,14 @@ class UploadHandlerComponent extends Object {
 		$ok = false;
 		$this->uploadpath = WWW_ROOT.$this->params['form']['webroot_path'];
 		$this->filename = $this->params['form']['Filedata']['name'];
-		$ok = $this->write();
+		$uploadStatus = $this->write();
 
-		if (!$ok) {
+		if (!$uploadStatus) {
 			header("HTTP/1.0 500 Internal Server Error");	//this should tell SWFUpload what's up
 		}
 
 		$this->setParams();
-		return ($ok);
+		return $uploadStatus;
 	}
 
 	function setParams() {
@@ -71,7 +71,7 @@ class UploadHandlerComponent extends Object {
 
 	function write() {
 		if (!class_exists('Folder')) {
-			uses ('folder');
+			uses('folder');
 		}
 
 		$moved = false;
