@@ -22,6 +22,7 @@ class VideosController extends CakeUploadifyAppController {
 	}
 
 	public function admin_upload() {
+		$this->log($this->params);
 		if (isset($this->params['form']['Filedata'])) {
 
 			if ($this->UploadHandler->upload()) {

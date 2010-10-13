@@ -22,7 +22,7 @@ $(function() {
 			'onProgress': updateTrnsfrProgress,
 			'onSelectOnce': addFilesToTrnsfer,
 			'onSelect': onSelectItems,
-			'onAllComplete': cleanUp,
+			'onAllComplete': cleanUp
 		});
 
 		function addFilesToTrnsfer(event, data) {
@@ -48,7 +48,6 @@ $(function() {
 
 		function onItemComplete(event, queueId, fileObj, response, data) {
 			var upload = $.parseJSON(response);
-			console.debug(upload);
 
 			//Handle Image Uploads
 			if (upload.Image.length != 0) {
