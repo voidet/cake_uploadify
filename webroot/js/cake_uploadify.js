@@ -39,6 +39,16 @@ $(function() {
 
 		function onSelectItems(event, queueId, fileObj) {
 			files.push(fileObj.size);
+
+			$(document).trigger('attachVideoOptions');
+			fields = $('.optionalSettings-'+settings.uuid);
+			var hash = new Object();
+			fields.each(function() {
+				name = $(this).attr('name');
+				textValue = escape($(this).attr('value'));
+				hash[name] = textValue;
+			});
+			$("#CakeUploadify-"+settings.uuid).uploadifySettings('scriptData', hash);
 		}
 
 		function updateTrnsfrProgress(event, queueId, fileObj, data) {
