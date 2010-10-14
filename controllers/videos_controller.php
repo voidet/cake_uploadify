@@ -22,7 +22,6 @@ class VideosController extends CakeUploadifyAppController {
 	}
 
 	public function admin_upload() {
-		$this->log($this->params);
 		if (isset($this->params['form']['Filedata'])) {
 
 			if ($this->UploadHandler->upload()) {
@@ -47,8 +46,9 @@ class VideosController extends CakeUploadifyAppController {
 	}
 
 	private function uploadVideo($fileInfo) {
+
 		$this->log($fileInfo);
-		exit;
+
 		App::import('Vendor', 'zend_include_path');
 		App::import('Vendor', 'Zend/Gdata');
 		App::import('Vendor', 'Zend/Gdata/Youtube');
@@ -60,16 +60,14 @@ class VideosController extends CakeUploadifyAppController {
 		$yt = new Zend_Gdata_YouTube($httpClient, Configure::read('Youtube.application_title'), $user['User']['username'], Configure::read('Youtube.developer_key'));
 		$myVideoEntry = new Zend_Gdata_YouTube_VideoEntry();
 
-		$this->log($fileInfo);
-
 		$filesource = $yt->newMediaFileSource($fileInfo['Video']['full_path']);
 		$filesource->setContentType('video/quicktime');
 		$filesource->setSlug('mytestmovie.mov');
 
 		$myVideoEntry->setMediaSource($filesource);
-		$myVideoEntry->setVideoTitle('My Test Movie');
-		$myVideoEntry->setVideoDescription('My Test Movie');
-		$myVideoEntry->setVideoCategory('Comedy');
+		$myVideoEntry->setVideoTitle($fileInfo['metadata']['Title']);
+		$myVideoEntry->setVideoDescription($fileInfo['metadata']['Description']);
+		$myVideoEntry->setVideoCategory($fileInfo['metadata']['Category']);
 		$myVideoEntry->setVideoPrivate();
 
 		$myVideoEntry->setVideoTags('cars, funny');
@@ -81,7 +79,6 @@ class VideosController extends CakeUploadifyAppController {
 		$yt->registerPackage('Zend_Gdata_Geo');
 		$yt->registerPackage('Zend_Gdata_Geo_Extension');
 
-
 		// upload URI for the currently authenticated user
 		$uploadUrl = 'http://uploads.gdata.youtube.com/feeds/api/users/default/uploads';
 
@@ -89,10 +86,11 @@ class VideosController extends CakeUploadifyAppController {
 		// or just a regular Zend_Gdata_App_Exception
 		try {
 			$newEntry = $yt->insertEntry($myVideoEntry, $uploadUrl, 'Zend_Gdata_YouTube_VideoEntry');
+			$this->log($newEntry);
 		} catch (Zend_Gdata_App_HttpException $httpException) {
-			echo $httpException->getRawResponseBody();
+			$this->log($httpException->getRawResponseBody());
 		} catch (Zend_Gdata_App_Exception $e) {
-			echo $e->getMessage();
+			$this->log($e->getMessage());
 		}
 	}
 
