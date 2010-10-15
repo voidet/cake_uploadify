@@ -33,22 +33,19 @@ class VideosController extends CakeUploadifyAppController {
 				if (empty($videoExists)) {
 					$this->Video->save($this->data);
 					$this->data['Video']['id'] = $this->Video->id;
-					$this->uploadVideo($this->data);
+					$file_info = $this->uploadVideo($this->data);
 				} else {
 					$this->UploadHandler->removeDuplicate(WWW_ROOT.$this->data['Video']['path'].$this->data['Video']['name']);
 					$this->data = $videoExists;
+					$file_info = $this->data;
 				}
 
-				$file_info = $this->data;
 				$this->set(compact('file_info'));
 			}
 		}
 	}
 
 	private function uploadVideo($fileInfo) {
-
-		$this->log($fileInfo);
-
 		App::import('Vendor', 'zend_include_path');
 		App::import('Vendor', 'Zend/Gdata');
 		App::import('Vendor', 'Zend/Gdata/Youtube');
@@ -86,7 +83,7 @@ class VideosController extends CakeUploadifyAppController {
 		// or just a regular Zend_Gdata_App_Exception
 		try {
 			$newEntry = $yt->insertEntry($myVideoEntry, $uploadUrl, 'Zend_Gdata_YouTube_VideoEntry');
-			$this->log($newEntry);
+			return $newEntry;
 		} catch (Zend_Gdata_App_HttpException $httpException) {
 			$this->log($httpException->getRawResponseBody());
 		} catch (Zend_Gdata_App_Exception $e) {

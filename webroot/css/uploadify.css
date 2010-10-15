@@ -81,11 +81,11 @@ THE SOFTWARE.
 	margin: -12px 12 0 0;
 }
 
-.uploadSpeed span {
+.uploadSpeed span, .topGreyInfo span {
 	color: #CCC;
 }
 
-.uploadSpeed {
+.uploadSpeed, .topGreyInfo {
 	font-size: 24px;
 	color: #ECECEC;
 	position: absolute;
