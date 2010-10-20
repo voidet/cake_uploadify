@@ -7,7 +7,7 @@ $(function() {
 		var settings = settings;
 		var total = 0;
 
-		$("#CakeUploadify-"+settings.uuid).uploadify({
+		$("#"+settings.model+"CakeUploadify-"+settings.uuid).uploadify({
 			'uploader': '/cake_uploadify/flash/uploadify.swf',
 			'script': settings.script,
 			'method': 'POST',
