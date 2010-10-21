@@ -73,13 +73,6 @@ $(function() {
 
 				$('#'+queueId).css({top: 0}).fadeIn('slow').animate({'margin-top':'20px'},{queue:false,duration:500,easing:'easeOutBounce'});
 
-
-				$('.uploadItem').hover(function() {
-					$(this).find('.cakeUploadify-removeItem').fadeIn('fast');
-				}, function() {
-					$(this).find('.cakeUploadify-removeItem').fadeOut('fast');
-				});
-
 				$('.cakeUploadify-removeItem').click(function(){
 					$(this).closest('.uploadItem').fadeOut('slow', function() {
 						$(this).remove();
@@ -105,6 +98,13 @@ $(function() {
 					$(this).attr('value', order);
 			});
 		});
+	});
+
+
+	$('.uploadItem').hover(function() {
+		$(this).find('.cakeUploadify-removeItem').fadeIn('fast');
+	}, function() {
+		$(this).find('.cakeUploadify-removeItem').fadeOut('fast');
 	});
 
 });
