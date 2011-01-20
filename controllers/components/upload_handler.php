@@ -2,56 +2,53 @@
 
 class UploadHandlerComponent extends Object {
 
-	/* component configuration */
 	var $name = 'UploadHandlerComponent';
 	var $params = array();
 	var $uploadpath;
-	var $overwrite = false;
 	var $filename;
+	var $overwrite = false;
 
 	function startup(&$controller) {
 		$this->params = $controller->params;
 	}
 
-	function upload() {
-		$ok = false;
-		$this->uploadpath = WWW_ROOT.$this->params['form']['webroot_path'];
+	function upload($dest_dir) {
+		$this->uploadpath = $dest_dir;
 		$this->filename = $this->params['form']['Filedata']['name'];
 		$uploadStatus = $this->write();
 
 		if (!$uploadStatus) {
-			header("HTTP/1.0 500 Internal Server Error");	//this should tell SWFUpload what's up
+			header("HTTP/1.0 500 Internal Server Error");
 		}
 
 		$this->setParams();
-		return $uploadStatus;
+		if ($uploadStatus === true) {
+			return $this->params['form'];
+		} else {
+			return false;
+		}
 	}
 
 	function setParams() {
 		$this->params['form']['Filedata']['name'] = $this->filename;
-		$this->params['form']['Filedata']['path'] = str_replace(WWW_ROOT, '', $this->uploadpath);
+		$this->params['form']['Filedata']['path'] = $this->uploadpath;
 		$extension = array_pop(explode('.', $this->filename));
-
 		$this->params['form']['Filedata']['ext'] = $extension;
-
-		$filename = substr($this->filename, 0, (0 - (strlen($extension) + 1)));
-
-		list($width, $height) = getimagesize($this->uploadpath.$this->filename);
-
-		$this->params['form']['Filedata']['width'] = $width;
-		$this->params['form']['Filedata']['height'] = $height;
-		$this->params['form']['Filedata']['slug'] = strtolower(Inflector::slug($filename, '-'));
+		$this->params['form']['Filedata']['slug'] = strtolower(Inflector::slug($this->filename, '-'));
 		$this->params['form']['Filedata']['md5'] = md5_file($this->uploadpath.$this->filename);
 		$this->params['form']['Filedata']['full_path'] = $this->uploadpath.$this->filename;
-
 	}
 
-	function removeDuplicate($file) {
-		return unlink($file);
+	function removeDuplicates($filename) {
+		if (file_exists($filename)) {
+			$file = $this->uploadpath.$this->filename;
+			return unlink($file);
+		} else {
+			rename($this->uploadpath.$this->filename, $this->uploadpath.$filename);
+		}
 	}
 
 	function findUniqueFilename($existing_files = null) {
-		// append a digit to the end of the name
 		$filenumber = 0;
 		$filesuffix = '';
 		$fileparts = explode('.', $this->filename);
@@ -60,9 +57,8 @@ class UploadHandlerComponent extends Object {
 
 		if (is_array($existing_files)) {
 			do {
-				$newfile = $filebase . $filesuffix . $fileext;
-				$filenumber++;
-				$filesuffix = '(' . $filenumber . ')';
+				$newfile = $filebase.$filesuffix.$fileext;
+				$filesuffix = '('.++$filenumber.')';
 			} while (in_array($newfile, $existing_files));
 		}
 
@@ -74,19 +70,17 @@ class UploadHandlerComponent extends Object {
 			uses('folder');
 		}
 
-		$moved = false;
 		$folder = new Folder($this->uploadpath, true, 0755);
-
 		if ($folder) {
 			if (!$this->overwrite) {
 				$contents = $folder->read();
-				$this->filename = $this->findUniqueFilename($contents[1]);  //pass the file list as an array
+				$this->filename = $this->findUniqueFilename($contents[1]);
 			}
-
-			$moved = move_uploaded_file($this->params['form']['Filedata']['tmp_name'], $this->uploadpath.$this->filename);
+			if (move_uploaded_file($this->params['form']['Filedata']['tmp_name'], $this->uploadpath.$this->filename)) {
+				return true;
+			}
 		}
 
-		return $moved;
 	}
 
 }

@@ -7,7 +7,7 @@ $(function() {
 		var settings = settings;
 		var total = 0;
 
-		$("#"+settings.model+"CakeUploadify-"+settings.uuid).uploadify({
+		$("#"+settings.model[0]+"CakeUploadify-"+settings.uuid).uploadify({
 			'uploader': '/cake_uploadify/flash/uploadify.swf',
 			'script': settings.script,
 			'method': 'POST',
@@ -48,6 +48,7 @@ $(function() {
 				textValue = escape($(this).attr('value'));
 				hash[name] = textValue;
 			});
+
 			$("#CakeUploadify-"+settings.uuid).uploadifySettings('scriptData', hash);
 		}
 
@@ -59,17 +60,18 @@ $(function() {
 		function onItemComplete(event, queueId, fileObj, response, data) {
 			var upload = $.parseJSON(response);
 
-			//Handle Image Uploads
-			if (upload.Image.length != 0) {
+			console.debug(typeof(upload));
+			console.debug(settings.upload_type);
+
+
+			if (typeof(upload) == 'object' && settings.upload_type == 'image') {
+				console.debug(upload);
 				var width = Number(upload.metadata.width);
 				var height = Number(upload.metadata.height);
 
-				var extrafields = '';
-				for (i=0; i < settings.extra_fields.length; i++) {
-					extrafields = extrafields + '<input type="hidden" name="'+upload.metadata.inputName+'['+upload.Image.id+']['+settings.extra_fields[i]+']" />';
-				}
+				var item = $('#'+upload.metadata.uuid+'.uploadBin').append('<div id="'+queueId+'" class="uploadItem" style="width: '+ (width + 10) +'px; height: '+ (height + 10) +'px;"><img src="/cake_uploadify/img/close.png" height="25" width="25" alt="Remove Item?" border="0" class="cakeUploadify-removeItem" /><img src="/generated/images/'+upload.Image.slug+'_p100x100.jpg" class="uploadItemImage" /><input type="hidden" name="'+upload.metadata.input_name+'['+upload.Image.id+'][uuid]" value="'+settings.uuid+'" /><input type="hidden" name="'+upload.metadata.input_name+'['+upload.Image.id+'][image_id]" value="'+upload.Image.id+'" /><input type="hidden" name="'+upload.metadata.input_name+'['+upload.Image.id+']['+upload.metadata.position_field+']" value="" class="uploadPosition" />'+extrafields+'</div>');
 
-				var item = $('#'+upload.metadata.uuid+'.uploadBin').append('<div id="'+queueId+'" class="uploadItem" style="width: '+ (width + 10) +'px; height: '+ (height + 10) +'px;"><img src="/cake_uploadify/img/close.png" height="25" width="25" alt="Remove Item?" border="0" class="cakeUploadify-removeItem" /><img src="/generated/images/'+upload.Image.slug+'_w'+ width +'_h100.jpg" class="uploadItemImage" /><input type="hidden" name="'+upload.metadata.inputName+'['+upload.Image.id+'][uuid]" value="'+settings.uuid+'" /><input type="hidden" name="'+upload.metadata.inputName+'['+upload.Image.id+'][image_id]" value="'+upload.Image.id+'" /><input type="hidden" name="'+upload.metadata.inputName+'['+upload.Image.id+']['+upload.metadata.position_field+']" value="" class="uploadPosition" />'+extrafields+'</div>');
+				console.debug(item);
 
 				$('#'+queueId).css({top: 0}).fadeIn('slow').animate({'margin-top':'20px'},{queue:false,duration:500,easing:'easeOutBounce'});
 
