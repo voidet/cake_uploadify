@@ -60,19 +60,19 @@ $(function() {
 		function onItemComplete(event, queueId, fileObj, response, data) {
 			var upload = $.parseJSON(response);
 
-			console.debug(typeof(upload));
-			console.debug(settings.upload_type);
-
-
 			if (typeof(upload) == 'object' && settings.upload_type == 'image') {
-				console.debug(upload);
-				var width = Number(upload.metadata.width);
-				var height = Number(upload.metadata.height);
 
-				var item = $('#'+upload.metadata.uuid+'.uploadBin').append('<div id="'+queueId+'" class="uploadItem" style="width: '+ (width + 10) +'px; height: '+ (height + 10) +'px;"><img src="/cake_uploadify/img/close.png" height="25" width="25" alt="Remove Item?" border="0" class="cakeUploadify-removeItem" /><img src="/generated/images/'+upload.Image.slug+'_p100x100.jpg" class="uploadItemImage" /><input type="hidden" name="'+upload.metadata.input_name+'['+upload.Image.id+'][uuid]" value="'+settings.uuid+'" /><input type="hidden" name="'+upload.metadata.input_name+'['+upload.Image.id+'][image_id]" value="'+upload.Image.id+'" /><input type="hidden" name="'+upload.metadata.input_name+'['+upload.Image.id+']['+upload.metadata.position_field+']" value="" class="uploadPosition" />'+extrafields+'</div>');
+				single_item = '<div id="'+queueId+'" class="uploadItem"><img src="/cake_uploadify/img/close.png" height="25" width="25" alt="Remove Item?" border="0" class="cakeUploadify-removeItem" /><img src="'+settings.thumb_dir + '/' + upload.slug + settings.thumb_suffix +'.jpg" class="uploadItemImage" /><input type="hidden" name="data'+upload.input_name+'[%upload_id%][uuid]" value="'+settings.uuid+'" /><input type="hidden" name="data'+upload.input_name+'[%upload_id%][image_id]" value="'+upload.id+'" /><input type="hidden" name="data'+upload.input_name+'[%upload_id%][image_position]" value="" class="uploadPosition" />';
 
-				console.debug(item);
+				extraitems = '';
+				if (settings.extrafields.length > 0) {
+					for (i=0; i < settings.extrafields.length; i++) {
+						extraitems = extraitems + '<input type="hidden" name="data'+upload.input_name + '[%upload_id%]' + settings.extrafields[i].name+'" value="'+settings.extrafields[i].value+'" />';
+					}
+				}
 
+				var item = $('#'+settings.uuid+'.uploadBin').append(single_item+extraitems+'</div>');
+				$('#'+queueId).attachHover();
 				$('#'+queueId).css({top: 0}).fadeIn('slow').animate({'margin-top':'20px'},{queue:false,duration:500,easing:'easeOutBounce'});
 
 				$('.cakeUploadify-removeItem').click(function(){
@@ -90,23 +90,43 @@ $(function() {
 		}
 	});
 
-	$('#PostAdminForm').submit(function() {
+	$('input[type=submit]').click(function() {
 		var order = 0;
+
+		$("#"+settings.id).remove();
 		$('.uploadBin').each(function() {
+
+			var upload_id = 0;
+			$(this).find('.uploadItem').each(function() {
+				$(this).find('input[type=hidden]').each(function() {
+					$(this).attr('name', $(this).attr('name').replace(/%upload_id%/, upload_id));
+				});
+				upload_id++;
+			});
+
+			return false;
+
 			$(this).filter(function() {
 					$(this).find('.uploadItem input[type=hidden].uploadPosition');
 				}).each(function() {
 					order++;
 					$(this).attr('value', order);
 			});
+
 		});
 	});
 
+	$(function() {
+		$.fn.attachHover = function() {
+			$(this).hover(function() {
+				$(this).find('.cakeUploadify-removeItem').fadeIn('fast');
+			}, function() {
+				$(this).find('.cakeUploadify-removeItem').fadeOut('fast');
+			});
+		}
 
-	$('.uploadItem').hover(function() {
-		$(this).find('.cakeUploadify-removeItem').fadeIn('fast');
-	}, function() {
-		$(this).find('.cakeUploadify-removeItem').fadeOut('fast');
+		$('.uploadItem').attachHover();
+
 	});
 
 });

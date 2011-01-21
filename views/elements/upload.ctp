@@ -11,19 +11,19 @@
 
 	if (!empty($settings['items'])) {
 		foreach ($settings['items'] as $item) {
-			echo '<div id="Uploadify-item-'.$item['id'].'" class="uploadItem" style="width: '.($settings['width'] + 10).'px; height: '.($settings['height'] + 10).'px;">';
+			echo '<div id="Uploadify-item-'.$item['id'].'" class="uploadItem" style="margin-top: 20px;">';
 				echo '<img src="/cake_uploadify/img/close.png" height="25" width="25" alt="Remove Item?" border="0" class="cakeUploadify-removeItem" />';
 				echo '<img src="/generated/images/'.$item['Image']['slug'].'_p.'.$settings['thumb_suffix'].'.jpg" class="uploadItemImage" />';
-				echo '<input type="hidden" name="'.$input_name.'[\'+upload.Image.id+\'][uuid]" value="\'+settings.uuid+\'" />';
-				echo '<input type="hidden" name="'.$input_name.'[\'+upload.Image.id+\'][image_id]" value="\'+upload.Image.id+\'" />';
+				echo '<input type="hidden" name="'.$input_name.'[%upload_id%][uuid]" value="\'+settings.uuid+\'" />';
+				echo '<input type="hidden" name="'.$input_name.'[%upload_id%][image_id]" value="\'+upload.Image.id+\'" />';
 
 			if (isset($settings['sortable']) && $settings['sortable'] === true) {
-				echo '<input type="hidden" name="'.$input_name.'[\'+upload.Image.id+\'][\'+upload.metadata.position+\']" value="" class="uploadPosition" />';
+//				echo '<input type="hidden" name="'.$input_name.'[%upload_id%][\'position\']" value="" class="uploadPosition" />';
 			}
 
 		if (!empty($settings['extrafields'])) {
 			foreach ($settings['extrafields'] as $field) {
-				echo $this->Form->input($field['name'], array($field['options']));
+				echo $this->Form->input($field['name'], $field['options']);
 			}
 		}
 		echo '</div>';

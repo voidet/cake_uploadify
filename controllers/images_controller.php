@@ -28,21 +28,24 @@ class ImagesController extends CakeUploadifyAppController {
 			$upload = $this->UploadHandler->upload($dest_dir);
 
 			if ($upload !== false) {
-				// $image = $this->Image->find('first', array(
-				// 					'conditions' => array('md5' => $upload['Filedata']['md5']),
-				// 					'fields' => array('slug', 'name'),
-				// 					'recursive' => -1));
+				$image = $this->Image->find('first', array(
+					'conditions' => array('md5' => $upload['Filedata']['md5']),
+					'fields' => array($this->Image->primaryKey, 'slug', 'name'),
+					'recursive' => -1));
 
 				if (empty($image)) {
 					$new_image['Image'] = $upload['Filedata'];
 					$this->Image->save($new_image);
-					$image['metadata'] = $upload['Filedata']['slug'];
+					$meta['slug'] = $upload['Filedata']['slug'];
+					$meta['id'] = $this->Image->id;
 				} else {
 					$this->UploadHandler->removeDuplicates($image['Image']['name']);
-					$image['metadata'] = $image['Image']['slug'];
+					$meta['slug'] = $image['Image']['slug'];
+					$meta['id'] = $image['Image'][$this->Image->primaryKey];
 				}
 
-				$this->set('file_info', $image);
+				$meta['input_name'] = '['.join('][', explode(',', $this->params['form']['model'])).']';
+				$this->set('file_info', $meta);
 			}
 		}
 	}
