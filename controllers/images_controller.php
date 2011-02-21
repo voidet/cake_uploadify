@@ -34,8 +34,9 @@ class ImagesController extends CakeUploadifyAppController {
 					'recursive' => -1));
 
 				if (empty($image)) {
-					$new_image['Image'] = $upload['Filedata'];
-					$this->Image->save($new_image);
+					$upload['Filedata'] = $this->__getImageDimensions($upload['Filedata']);
+					$newImage['Image'] = $upload['Filedata'];
+					$this->Image->save($newImage);
 					$meta['slug'] = $upload['Filedata']['slug'];
 					$meta['id'] = $this->Image->id;
 				} else {
@@ -48,6 +49,13 @@ class ImagesController extends CakeUploadifyAppController {
 				$this->set('file_info', $meta);
 			}
 		}
+	}
+
+	private function __getImageDimensions($data = array()) {
+		if (!empty($data)) {
+			list($data['width'], $data['height']) = getimagesize($data['full_path']);
+		}
+		return $data;
 	}
 
 }

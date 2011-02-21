@@ -53,13 +53,14 @@ THE SOFTWARE.
 }
 
 .uploadBin {
-	padding-bottom: 20px;
+	display: none;
 	margin-bottom: 20px;
 	overflow: auto;
 	width: 100%;
 }
 
 .uploadBin .uploadItem {
+	margin-top: -20px;
 	padding: 5px 10px 0px 0px;
 	display: block;
 	position: relative;
@@ -93,5 +94,9 @@ THE SOFTWARE.
 	top: 0;
 	right: 0;
 	display: none;
+	padding: 20px;
+}
+
+.progress {
 	padding: 20px;
 }

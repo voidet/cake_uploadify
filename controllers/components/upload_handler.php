@@ -31,12 +31,11 @@ class UploadHandlerComponent extends Object {
 
 	function setParams() {
 		$this->params['form']['Filedata']['name'] = $this->filename;
-		$this->params['form']['Filedata']['path'] = $this->uploadpath;
 		$extension = array_pop(explode('.', $this->filename));
+		$this->params['form']['Filedata']['path'] = $this->uploadpath.$this->filename;
 		$this->params['form']['Filedata']['ext'] = $extension;
 		$this->params['form']['Filedata']['slug'] = strtolower(Inflector::slug($this->filename, '-'));
 		$this->params['form']['Filedata']['md5'] = md5_file($this->uploadpath.$this->filename);
-		$this->params['form']['Filedata']['full_path'] = $this->uploadpath.$this->filename;
 	}
 
 	function removeDuplicates($filename) {
@@ -70,7 +69,7 @@ class UploadHandlerComponent extends Object {
 			uses('folder');
 		}
 
-		$folder = new Folder($this->uploadpath, true, 0755);
+		$folder = new Folder($this->uploadpath, true, 0777);
 		if ($folder) {
 			if (!$this->overwrite) {
 				$contents = $folder->read();
