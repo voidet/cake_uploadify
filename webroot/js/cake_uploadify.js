@@ -66,7 +66,7 @@ $(function() {
 				//Uploaded an image and setup the hideen fields along with a image tag to the thumbnail
 				single_item = '<div id="'+queueId+'" class="uploadItem">\
 					<img src="/cake_uploadify/img/close.png" height="25" width="25" alt="Remove Item?" border="0" class="cakeUploadify-removeItem" />\
-					<img src="'+settings.thumb_dir + '/' + upload.slug + settings.thumb_suffix +'.jpg" class="uploadItemImage" />\
+					<img src="'+settings.thumb_dir + '/' + upload.slug + settings.thumb_suffix +'.jpg" class="uploadItemImage" width="'+ settings.width +'" height="'+ settings.height +'" />\
 					<input type="hidden" name="data'+upload.input_name+'[%upload_id%][uuid]" value="'+settings.uuid+'" />\
 					<input type="hidden" name="data'+upload.input_name+'[%upload_id%][image_id]" value="'+upload.id+'" />\
 					<input type="hidden" name="data'+upload.input_name+'[%upload_id%][image_position]" value="" class="uploadPosition" />';
@@ -139,5 +139,11 @@ $(function() {
 	}
 
 	$('.uploadItem').attachHover();
+
+	if (!$('.uploadBin').has('div')) {
+		$('.uploadBin').hide();
+	} else {
+		$('.uploadBin').fadeIn(500);
+	}
 
 });

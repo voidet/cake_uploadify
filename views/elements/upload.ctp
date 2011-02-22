@@ -13,7 +13,7 @@
 		foreach ($settings['items'] as $item) {
 			echo '<div id="Uploadify-item-'.$item['id'].'" class="uploadItem" style="margin-top: 20px;">';
 				echo '<img src="/cake_uploadify/img/close.png" height="25" width="25" alt="Remove Item?" border="0" class="cakeUploadify-removeItem" />';
-				echo '<img src="/generated/images/'.$item['Image']['slug'].'_p.'.$settings['thumb_suffix'].'.jpg" class="uploadItemImage" />';
+				echo '<img src="/generated/images/'.$item['Image']['slug'].'_p.'.$settings['thumb_suffix'].'.jpg" width="'.$settings['width'].'" height="'.$settings['height'].'" class="uploadItemImage" />';
 				echo '<input type="hidden" name="'.$input_name.'[%upload_id%][uuid]" value="\'+settings.uuid+\'" />';
 				echo '<input type="hidden" name="'.$input_name.'[%upload_id%][image_id]" value="\'+upload.Image.id+\'" />';
 
