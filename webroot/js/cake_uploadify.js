@@ -107,7 +107,7 @@ $(function() {
 	$('input[type=submit]').click(function() {
 		var order = 0;
 
-//		$("#"+settings.id).remove();
+		$("input.uploadify").remove();
 		$('.uploadBin').each(function() {
 
 			var upload_id = 0;
@@ -126,8 +126,8 @@ $(function() {
 					order++;
 					$(this).attr('value', order);
 			});
-
 		});
+
 	});
 
 	$.fn.attachHover = function() {
