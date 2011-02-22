@@ -107,7 +107,7 @@ $(function() {
 	$('input[type=submit]').click(function() {
 		var order = 0;
 
-		$("#"+settings.id).remove();
+//		$("#"+settings.id).remove();
 		$('.uploadBin').each(function() {
 
 			var upload_id = 0;
